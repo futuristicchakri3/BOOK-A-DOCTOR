@@ -5,9 +5,6 @@ const path = require('path');
 const fs = require('fs');
 const connectDB = require('./config/db');
 
-// Initialize database connection
-connectDB();
-
 const app = express();
 
 // Middlewares
@@ -49,6 +46,8 @@ app.use((err, req, res, next) => {
 
 const PORT = process.env.PORT || 5000;
 
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT} in ${process.env.NODE_ENV || 'development'} mode`);
+connectDB().then(() => {
+  app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT} in ${process.env.NODE_ENV || 'development'} mode`);
+  });
 });

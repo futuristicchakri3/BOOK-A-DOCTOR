@@ -7,10 +7,14 @@ const Report = require('../models/Report');
 
 const seedData = async () => {
   try {
-    // Connect to DB
-    const connStr = process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/book_a_doctor';
-    await mongoose.connect(connStr);
-    console.log('MongoDB Connected for Seeding...');
+    // Connect to DB (only if there isn't an active connection)
+    if (mongoose.connection.readyState === 0) {
+      const connStr = process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/book_a_doctor';
+      await mongoose.connect(connStr);
+      console.log('MongoDB Connected for Seeding...');
+    } else {
+      console.log('Using existing MongoDB Connection for Seeding...');
+    }
 
     // Clear existing collections
     await User.deleteMany({});
